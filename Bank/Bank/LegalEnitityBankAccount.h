@@ -12,13 +12,13 @@ private:
     string _name;
     Date _establishing_date;
     string _TIN;
-    Addres _legal_addres;
 public:
-    LegalEnitityBankAccount(string name, Date establishing_date, string TIN, Addres legal_addres);
+    LegalEnitityBankAccount();
 
-    void set_name(string name);
-    void set_establishing_date(Date establishing_date);
-    void set_TIN(string TIN);
-    void set_legal_addres(Addres legal_addres);
+    void set_name(string name) { _name = name; };
+    void set_establishing_date(Date establishing_date) { _establishing_date = establishing_date; };
+    void set_TIN(string TIN) { _TIN = TIN; };
+
+    friend std::istream& operator>>(istream& in, LegalEnitityBankAccount& t);
 };
 
