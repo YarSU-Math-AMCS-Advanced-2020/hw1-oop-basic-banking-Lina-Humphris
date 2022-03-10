@@ -34,13 +34,10 @@ std::istream& operator>>(istream& in, Date& t) {
 	int day, month, year;
 	cout << "¬ведите число: ";
 	cin >> day;
-	cout << endl;
 	cout << "¬ведите мес€ц (от 1 до 12): ";
 	cin >> month;
-	cout << endl;
 	cout << "¬ведите год: ";
 	cin >> year;
-	cout << endl;
 	t.set_day(day);
 	t.set_month(month);
 	t.set_year(year);

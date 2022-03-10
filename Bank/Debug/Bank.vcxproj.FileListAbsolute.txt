@@ -1,0 +1,2 @@
+C:\Users\Алина\Univer\hw1-oop-basic-banking-Lina-Humphris\Bank\Debug\Bank.exe
+C:\Users\Алина\Univer\hw1-oop-basic-banking-Lina-Humphris\Bank\Debug\Bank.pdb

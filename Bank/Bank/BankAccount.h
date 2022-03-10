@@ -12,10 +12,8 @@ protected:
 	string _phone_number;
 
 public:
-	BankAccount(string account_id, Addres addres, string phone_number);
-
-	void set_account_id(string account_id);
-	void set_addres(Addres addres);
-	void set_phone_number(string phone_number);
+	void set_account_id(string account_id) { _account_id = account_id; };
+	void set_addres(Addres addres) { _addres = addres; };
+	void set_phone_number(string phone_number) { _phone_number = phone_number; };
 };
 
