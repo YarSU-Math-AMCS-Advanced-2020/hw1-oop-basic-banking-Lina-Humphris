@@ -37,5 +37,12 @@ std::istream& operator>>(istream& in, PersonalBankAccount& t) {
 	cin >> temp_date;
 	t.set_birth_date(temp_date);
 	cout << "";
+	int temp_int;
+	cout << "¬ведите -1, если вы мужского пола; 1, если вы женского пола; иначе введите 0: ";
+	cin >> temp_int;
+	t.set_sex(temp_int);
+	cout << "¬ведите серию и номер паспорта в виде двенадцатизначного числа: ";
+	cin >> s;
+	t.set_passport(s);
 	return in;
 }
