@@ -1,0 +1,14 @@
+﻿  Addres.cpp
+  BankAccount.cpp
+  CashIn.cpp
+  CashOut.cpp
+  CashTransaction.cpp
+  Date.cpp
+  DebitAccount.cpp
+  DebitCard.cpp
+  LegalEnitityBankAccount.cpp
+  PersonalBankAccount.cpp
+  Transaction.cpp
+  Создание кода...
+MSVCRTD.lib(exe_main.obj) : error LNK2019: ссылка на неразрешенный внешний символ _main в функции "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\Алина\Univer\hw1-oop-basic-banking-Lina-Humphris\Bank\Debug\Bank.exe : fatal error LNK1120: неразрешенных внешних элементов: 1
