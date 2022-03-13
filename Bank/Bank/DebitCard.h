@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Date.h"
+#include "DataBase.h"
 
 using namespace std;
 
