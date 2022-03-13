@@ -1,5 +1,7 @@
 #include "DataBase.h"
 
+DataBase* DataBase::p_instance = 0;
+
 string DataBase::id_to_string(long long id) {
 	string s = to_string(id);
 	string id_str = "";
