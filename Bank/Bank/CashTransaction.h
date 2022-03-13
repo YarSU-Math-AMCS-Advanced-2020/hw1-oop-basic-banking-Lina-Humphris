@@ -15,14 +15,14 @@ protected:
 	int _place_number;
 
 public:
-	CashTransaction(string debit_account, double amount, Date date, bool status, int place, int place_number);
+	CashTransaction();
 
-	void set_debit_account(string debit_account);
-	void set_amount(double amount);
+	void set_debit_account(string debit_account) { _debit_account = debit_account; };
+	void set_amount(double amount) { _amount = amount; };
 	void set_date();
-	void set_status(bool status);
-	void set_place(int place);
-	void set_place_number(int place_number);
+	void set_status(bool status) { _status = status; };
+	void set_place(int place) { _place = place; };
+	void set_place_number(int place_number) { _place_number = amount; };
 
 };
 
