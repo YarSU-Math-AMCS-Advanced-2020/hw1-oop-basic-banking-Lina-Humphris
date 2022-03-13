@@ -11,6 +11,7 @@ using namespace std;
 class DataBase
 {
 private:
+
 	//Для безопасности храним номер который будем использовать
 	long long _max_id_account = 1; //счетчик один для физ и юр лиц
 	long long _max_id_card = 1; 
@@ -20,8 +21,6 @@ private:
 	vector <DebitCard*> _base_card;
 
 public:
-	DataBase();
-
 	//будут возвращать id длины 16
 	string get_max_id_account();
 	string get_max_id_debit();
