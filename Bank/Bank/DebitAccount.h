@@ -21,6 +21,9 @@ public:
 	void set_limit(double limit) { _limit = limit; };
 	void set_currency(int currency) { _currency = currency; };
 
+	double get_limit() { return _limit; };
+	string get_debit_id() { return _debit_id; };
+
 	friend std::istream& operator>>(istream& in, DebitAccount& t);
 
 };
