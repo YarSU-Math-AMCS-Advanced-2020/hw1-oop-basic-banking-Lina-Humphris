@@ -15,5 +15,7 @@ public:
 	void set_account_id(string account_id) { _account_id = account_id; };
 	void set_addres(Addres addres) { _addres = addres; };
 	void set_phone_number(string phone_number) { _phone_number = phone_number; };
+
+	string get_account_id() { return _account_id; };
 };
 
