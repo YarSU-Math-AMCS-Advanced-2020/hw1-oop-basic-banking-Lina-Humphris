@@ -26,6 +26,12 @@ public:
     void set_sex(int sex) { _sex = sex; };
     void set_passport(string passport) { _passport = passport; };
 
+    void change_surname();
+    void change_name();
+    void change_patronymic();
+    void change_birth_date();
+    void change_sex();
+    void change_passport();
 
     friend std::istream& operator>>(istream& in, PersonalBankAccount& t);
 };
