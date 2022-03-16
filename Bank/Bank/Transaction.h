@@ -12,7 +12,7 @@ private:
 	double _amount;
 	int _currency_of_operation;
 	Date _date;
-	int _status;
+	int _status;// 0 если отклонено, иначе 1
 public:
 	Transaction();
 
@@ -23,6 +23,8 @@ public:
 	void set_date(Date date) { _date = date; };
 	void set_status(int status) { _status = status; };
 
+	string get_debit_account() { return _debit_account; };
+	string get_transfer_account() { return _transfer_account; };
+
 	friend std::istream& operator>>(istream& in, Transaction& t);
 };
-

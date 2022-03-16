@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -22,7 +23,9 @@ public:
 	void set_currency(int currency) { _currency = currency; };
 
 	double get_limit() { return _limit; };
-	string get_debit_id() { return _debit_id; };
+	string get_debit_id() { return _debit_id; }
+	double get_balance() { return _balance; };
+	int get_currency() { return _currency; };
 
 	friend std::istream& operator>>(istream& in, DebitAccount& t);
 
