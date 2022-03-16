@@ -21,6 +21,10 @@ public:
     void set_establishing_date(Date establishing_date) { _establishing_date = establishing_date; };
     void set_TIN(string TIN) { _TIN = TIN; };
 
+    void change_name();
+    void change_establishing_date();
+    void change_TIN();
+
     friend std::istream& operator>>(istream& in, LegalEnitityBankAccount& t);
 };
 

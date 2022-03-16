@@ -36,3 +36,24 @@ std::istream& operator>>(istream& in, LegalEnitityBankAccount& t) {
 	data_base->add_account(t);
 	return in;
 }
+
+void LegalEnitityBankAccount::change_name() {
+	cout << "¬ведите новое название компании: ";
+	string temp;
+	cin >> temp;
+	this->set_name(temp);
+}
+
+void LegalEnitityBankAccount::change_establishing_date() {
+	cout << "¬ведите новую дату создани€ компании: ";
+	Date temp;
+	cin >> temp;
+	this->set_establishing_date(temp);
+}
+
+void LegalEnitityBankAccount::change_TIN() {
+	cout << "¬ведите новый TIN: ";
+	string temp;
+	cin >> temp;
+	this->set_TIN(temp);
+}
