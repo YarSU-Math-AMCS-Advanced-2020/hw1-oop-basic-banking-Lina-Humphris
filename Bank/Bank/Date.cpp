@@ -25,8 +25,8 @@ Date Date::operator=(Date a)
 }
 
 std::ostream& operator<<(ostream& out, Date& t) {
-	cout<< "Date: " << t.get_day() << "." << t.get_month() << "." << t.get_year() << endl;
-	cout << "Time: " << t.get_hour() << ":" << t.get_minute() << ":" << t.get_second() << endl;
+	cout<< "Дата: " << t.get_day() << "." << t.get_month() << "." << t.get_year() << endl;
+	cout << "Время: " << t.get_hour() << ":" << t.get_minute() << ":" << t.get_second() << endl;
 	return out;
 }
 
