@@ -15,7 +15,7 @@ private:
 	int _house;
 	int _flat;
 public:
-	Addres(string country = "Russia", string region = "", string locality="Moscow", 
+	Addres(string country = "Russia", string region = "", string locality="Yaroslavl", 
 		string street="", string index="000000", int house = 0, int flat = 0);
 
 	void set_country(string country) { _country = country; };
@@ -37,7 +37,7 @@ public:
 	Addres operator=(Addres a);
 
 	friend std::istream& operator>>(istream& in, Addres& t);
-
+	friend std::ostream& operator<<(ostream& out, Addres& t);
 
 };
 

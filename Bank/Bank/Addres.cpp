@@ -51,3 +51,14 @@ std::istream& operator>>(istream& in, Addres& t) {
 	return in;
 }
 
+std::ostream& operator<<(ostream& out, Addres& t) {
+	cout << "Страна: " << t.get_country() << endl;
+	cout << "Регион: " << t.get_region() << endl;
+	cout << "Населенный пункт: " << t.get_locality() << endl;
+	cout << "Улица: " << t.get_street() << endl;
+	cout << "Номер дома: " << t.get_house() << endl;
+	cout << "Номер квартиры: " << t.get_flat() << endl;
+	cout << "Индех: " << t.get_index() << endl;
+
+	return out;
+}
