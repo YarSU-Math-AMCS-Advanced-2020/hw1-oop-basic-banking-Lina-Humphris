@@ -52,6 +52,24 @@ std::istream& operator>>(istream& in, PersonalBankAccount& t) {
 	return in;
 }
 
+std::ostream& operator<<(ostream& out, PersonalBankAccount& t) {
+	cout << "Ваш ID: " << t.get_account_id() << endl;
+	cout << "Ваша фамилия: " << t.get_surname() << endl;
+	cout << "Ваше имя: " << t.get_name() << endl;
+	cout << "Ваше отчество: " << t.get_patronymic() << endl;
+	Addres d = t.get_adress();
+	cout << "Ваш адрес: " << endl << d;
+	cout << "Ваш номер телефона: " << t.get_phone_number() << endl;
+	Date temp = t.get_birth_date();
+	int sex = t.get_sex();
+	cout << "Ваш пол: ";
+	if (sex == -1) cout << "мужской" << endl;
+	if (sex == 1) cout << "женский" << endl;
+	else cout << "пол не указан" << endl;
+	cout << "Ваши паспортные данные: " << t.get_passport() << endl;
+	return out;
+}
+
 void PersonalBankAccount::change_surname() {
 	cout << "Введите новую фамилию: ";
 	string temp;
