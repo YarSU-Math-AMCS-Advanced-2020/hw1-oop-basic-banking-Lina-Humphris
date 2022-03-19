@@ -11,6 +11,7 @@ DebitAccount::DebitAccount() {
 	set_balance(0);
 	set_limit(0);
 	set_currency(0);
+	set_has_card(false);
 }
 
 std::istream& operator>>(istream& in, DebitAccount& t) {
