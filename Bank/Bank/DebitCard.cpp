@@ -24,6 +24,7 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 			DebitAccount curr = base_debit[i];
 			if (curr.get_debit_id() == s) {
 				is_accept = true;
+				curr.set_has_card(true);
 			}
 		}
 		if (!is_accept) {
@@ -58,4 +59,52 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 	cout << "Регистрация прошла успешно, номер вашей карты: " << temp_id << endl;
 	data_base->add_card(t);
 	return in;
+}
+
+void DebitCard::rebinding_card() {
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitCard> base_card = data_base->get_base_card();
+	vector <DebitAccount> base_account = data_base->get_base_debit();
+	string card, account;
+	int num_of_debit_account, num_of_debit_card;
+	cout << "Введите номер карты, которую хотите перепривязать: ";
+	cin >> card;
+	bool is_accept = false;
+	while (!is_accept) {
+		for (int i = 0; i < base_card.size(); i++) {
+			DebitCard curr = base_card[i];
+			if (curr.get_card_id() == card) {
+				is_accept = true;
+				num_of_debit_card = i;
+			}
+		}
+		if (!is_accept) {
+			cout << "Карты с таким номером не существует, попробуйте еще раз: ";
+		}
+		if (!is_accept) cin >> card;
+	}
+	cout << "Введите номер счета, к которому хотите перепривязать карту: ";
+	cin >> account;
+	is_accept = false;
+	while (!is_accept) {
+		for (int i = 0; i < base_account.size(); i++) {
+			DebitAccount curr = base_account[i];
+			if (curr.get_debit_id() == account) {
+				is_accept = true;
+				num_of_debit_account = i;
+			}
+		}
+		if (!is_accept) {
+			cout << "Счета с таким номером не существует, попробуйте еще раз: ";
+		}
+		if (is_accept) {
+			if (base_account[num_of_debit_account].get_has_card()) {
+				cout << "К данному счету уже привязана карта, введите другой счет: ";
+				is_accept = false;
+			}
+		}
+		if (!is_accept) cin >> card;
+	}
+	base_card[num_of_debit_card].set_debit_id(account);
+	data_base->set_base_card(base_card);
 }

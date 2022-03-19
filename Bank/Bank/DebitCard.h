@@ -21,6 +21,11 @@ public:
 	void set_limit(double limit) { _limit = limit; };
 	void set_validity_period(Date validity_period) { _validity_period = validity_period; };
 
+	string get_card_id() { return _card_id; };
+	string get_debit_id() { return _debit_id; };
+
+	void rebinding_card();
+
 	friend std::istream& operator>>(istream& in, DebitCard& t);
 };
 
