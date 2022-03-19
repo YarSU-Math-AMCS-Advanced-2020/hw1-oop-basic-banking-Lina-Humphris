@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include "CashTransaction.h"
-#include "CashTransaction.h"
 #include "DebitAccount.h"
 
 using namespace std;
