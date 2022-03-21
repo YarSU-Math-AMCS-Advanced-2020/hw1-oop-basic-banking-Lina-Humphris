@@ -10,6 +10,43 @@ Transaction::Transaction() {
 	set_date(date_temp);
 	set_status(0);
 }
+Transaction::Transaction(string debit_account, string transfer_account, double amount, int currency_of_operation) {
+	set_debit_account(debit_account);
+	set_transfer_account(transfer_account);
+	set_amount(amount);
+	set_currency_of_operation(currency_of_operation);
+	Date date_temp;
+	set_date(date_temp);
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	vector <DebitCard> base_card = data_base->get_base_card();
+	for (int i = 0; i < base_debit.size(); i++) {
+		DebitAccount curr = base_debit[i];
+		if (curr.get_debit_id() == get_debit_account()) {
+			if (curr.get_limit() <= amount || curr.get_limit() == 0) {
+				if (curr.get_balance() >= amount) {
+					curr.set_balance(curr.get_balance() - amount);
+				}
+				else {
+					set_status(0);//возможно добавление выброса исключения с последующим отловом
+					return;
+				}
+			}
+			else {
+				set_status(0);
+				return;
+			}
+		}
+	}
+	for (int i = 0; i < base_debit.size(); i++) {
+		DebitAccount curr = base_debit[i];
+		if (curr.get_debit_id() == get_transfer_account()) {
+			curr.set_balance(curr.get_balance() + amount);
+		}
+	}
+	data_base->set_base_debit(base_debit);
+	set_status(1);
+}
 
 std::istream& operator>>(istream& in, Transaction& t) {
 	Date date_temp;
@@ -147,6 +184,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 		data_base->set_base_debit(base_debit);
 	}
 	t.set_amount(temp_amount);
+	t.set_currency_of_operation(debit_currency);
 	if (is_accept) t.set_status(1);
 	return in;
 }

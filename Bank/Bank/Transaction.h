@@ -15,7 +15,7 @@ private:
 	int _status;// 0 если отклонено, иначе 1
 public:
 	Transaction();
-
+	Transaction(string debit_account, string transfer_account, double amount, int currency_of_operation);
 	void set_debit_account(string debit_account) { _debit_account = debit_account; };
 	void set_transfer_account(string transfer_account) { _transfer_account = transfer_account; };
 	void set_amount(double amount) { _amount = amount; };
