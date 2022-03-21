@@ -14,6 +14,25 @@ DebitAccount::DebitAccount() {
 	set_has_card(false);
 }
 
+void DebitAccount::change_limit() {
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	double limit;
+	int n;
+	for (int i = 0; i < base_debit.size(); i++) {
+		DebitAccount curr = base_debit[i];
+		if (curr.get_debit_id() == get_debit_id()) {
+			n = i;
+		}
+	}
+	cout << "¬ведите лимит на сн€тие денег со счета или 0, если не хотите устанавливать лимит: ";
+	cin >> limit;
+	base_debit[n].set_limit(int(limit * 100) / 100);
+	data_base->set_base_debit(base_debit);
+
+}
+
+
 std::istream& operator>>(istream& in, DebitAccount& t) {
 	cout << "¬ведите ваш ID: ";
 	string s;

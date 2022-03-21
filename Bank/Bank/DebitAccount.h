@@ -32,6 +32,7 @@ public:
 	bool get_has_card() { return _has_card; }
 
 	void delete_debit_account();
+	void change_limit();
 
 	friend std::istream& operator>>(istream& in, DebitAccount& t);
 
