@@ -120,3 +120,16 @@ void DebitCard::rebinding_card() {
 	base_card[num_of_debit_card].set_debit_id(account);
 	data_base->set_base_card(base_card);
 }
+
+void DebitCard::delete_card() {
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitCard> base_card = data_base->get_base_card();
+	vector <DebitCard> new_base_card;
+	for (int i = 0; i < base_card.size(); i++) {
+		DebitCard curr = base_card[i];
+		if (curr.get_card_id() != get_card_id()) {
+			new_base_card.push_back(curr);
+		}
+	}
+	data_base->set_base_card(new_base_card);
+}
