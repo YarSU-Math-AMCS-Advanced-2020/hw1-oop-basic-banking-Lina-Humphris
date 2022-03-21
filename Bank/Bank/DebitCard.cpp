@@ -22,6 +22,35 @@ int DebitCard::get_debit_currency() {
 	}
 }
 
+void DebitCard::change_limit() {
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	vector <DebitCard> base_card = data_base->get_base_card();
+	double limit;
+	int n;
+	cout << "Введите 0, если не хотите устанавливать лимит на карту, -1, " <<
+		"если хотите установить лимит такой же,как на счете, иначе введите лимит: ";
+	cin >> limit;
+	limit = int(limit * 100) / 100;
+	for (int i = 0; i < base_card.size(); i++) {
+		DebitCard curr = base_card[i];
+		if (curr.get_card_id() == get_card_id()) {
+			n = i;
+		}
+	}
+	if (limit == -1) {
+		for (int i = 0; i < base_debit.size(); i++) {
+			DebitAccount curr = base_debit[i];
+			if (curr.get_debit_id() == get_debit_id()) {
+				base_card[n].set_limit(curr.get_limit());
+			}
+		}
+	}
+	else base_card[n].set_limit(limit);
+	data_base->set_base_card(base_card);
+}
+
+
 std::istream& operator>>(istream& in, DebitCard& t) {
 	cout << "Введите номер счета, к которому хотите привязать карту: ";
 	string s;
