@@ -38,6 +38,9 @@ std::istream& operator>>(istream& in, CashOut& t) {
 	if (n > limit) {
 		cout << "Сумма превышает лимит на снятие наличных в одни руки, операция будет отклонена.";
 		t.set_status(0);
+
+		vector <CashTransaction> base_cash = data_base->get_base_cash();
+		data_base->add_cash_transaction(t);
 		return in;
 	}
 	n = int(n * 100) / 100;
@@ -45,6 +48,9 @@ std::istream& operator>>(istream& in, CashOut& t) {
 	if (n > card_limit) {
 		cout << "Сумма превышает лимит карты, операция будет отклонена.";
 		t.set_status(0);
+
+		vector <CashTransaction> base_cash = data_base->get_base_cash();
+		data_base->add_cash_transaction(t);
 		return in;
 	}
 	vector <DebitAccount> base_debit = data_base->get_base_debit();
@@ -55,15 +61,16 @@ std::istream& operator>>(istream& in, CashOut& t) {
 			if (n > debit_balance) {
 				cout << "Сумма превышает баланс счета, операция будет отклонена.";
 				t.set_status(0);
+
+				vector <CashTransaction> base_cash = data_base->get_base_cash();
+				data_base->add_cash_transaction(t);
 				return in;
 			}
 			base_debit[i].set_balance(base_debit[i].get_balance() - n);
 		}
 	}
 	data_base->set_base_debit(base_debit);
-
+	vector <CashTransaction> base_cash = data_base->get_base_cash();
+	data_base->add_cash_transaction(t);
 	return in;
 }
-
-
-

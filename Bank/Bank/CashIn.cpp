@@ -47,5 +47,7 @@ std::istream& operator>>(istream& in, CashIn& t) {
 	}
 	data_base->set_base_debit(base_debit);
 
+	vector <CashTransaction> base_cash = data_base->get_base_cash();
+	data_base->add_cash_transaction(t);
 	return in;
 }

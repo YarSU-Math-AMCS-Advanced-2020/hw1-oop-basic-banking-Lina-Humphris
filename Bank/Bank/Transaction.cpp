@@ -186,5 +186,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	t.set_amount(temp_amount);
 	t.set_currency_of_operation(debit_currency);
 	if (is_accept) t.set_status(1);
+	vector <Transaction> base_transaction = data_base->get_base_transaction();
+	data_base->add_transaction(t);
 	return in;
 }
