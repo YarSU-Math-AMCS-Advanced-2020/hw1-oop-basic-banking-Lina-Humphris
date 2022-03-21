@@ -50,4 +50,52 @@ std::istream& operator>>(istream& in, DebitAccount& t) {
 	return in;
 }
 
+void DebitAccount::delete_debit_account() {
 
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	int n;
+	cout << "Введите 0 если хотите снять деньги со счета, иначе введите 0.";
+	cin >> n;
+	if (n == 1) {
+		set_limit(0);
+		cout << "Введите номер счета, на который будет совершен перевод: ";
+		string s;
+		cin >> s;
+		bool is_accept = false;
+		int transfer_currency;
+		string transfer;
+		while (!is_accept) {
+			for (int i = 0; i < base_debit.size(); i++) {
+				DebitAccount curr = base_debit[i];
+				if (curr.get_debit_id() == s) {
+					is_accept = true;
+					transfer_currency = curr.get_currency();
+					transfer = s;
+				}
+			}
+			if (!is_accept) {
+				cout << "Счета с таким номером не существует, попробуйте еще раз: ";
+			}
+			if (s == get_debit_id()) {
+				cout << "Номер введенного счета совпадает с номером счета с которого будет производиться перевод, попробуйте еще раз: ";
+				is_accept = false;
+			}
+			if (!is_accept) cin >> s;
+			if (is_accept && get_currency() != transfer_currency) {
+				cout << "Валюты счетов не совпадают, введите другой счет на который будет совершен перевод: ";
+				cin >> s;
+				is_accept = false;
+			}
+		}
+		Transaction del_acc(get_debit_id(), transfer, get_balance(), get_currency());
+	}
+	vector <DebitAccount> new_base_debit;
+	for (int i = 0; i < base_debit.size(); i++) {
+		DebitAccount curr = base_debit[i];
+		if (curr.get_debit_id() != get_debit_id()) {
+			new_base_debit.push_back(curr);
+		}
+	}
+	data_base->set_base_debit(new_base_debit);
+}

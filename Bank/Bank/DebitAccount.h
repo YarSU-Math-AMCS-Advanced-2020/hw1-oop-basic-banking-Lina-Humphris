@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Transaction.h"
 #include <string>
 
 using namespace std;
@@ -30,9 +31,8 @@ public:
 	int get_currency() { return _currency; };
 	bool get_has_card() { return _has_card; }
 
+	void delete_debit_account();
+
 	friend std::istream& operator>>(istream& in, DebitAccount& t);
 
 };
-
-
-
