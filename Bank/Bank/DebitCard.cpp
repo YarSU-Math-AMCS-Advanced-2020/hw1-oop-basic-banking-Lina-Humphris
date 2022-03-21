@@ -11,6 +11,18 @@ DebitCard::DebitCard() {
 	set_validity_period(temp_date);
 }
 
+int DebitCard::get_debit_currency() {
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	for (int i = 0; i < base_debit.size(); i++) {
+		DebitAccount curr = base_debit[i];
+		if (curr.get_debit_id() == get_debit_id()) {
+			return curr.get_currency();
+		}
+	}
+}
+
+
 std::istream& operator>>(istream& in, DebitCard& t) {
 	cout << "Введите номер счета, к которому хотите привязать карту: ";
 	string s;

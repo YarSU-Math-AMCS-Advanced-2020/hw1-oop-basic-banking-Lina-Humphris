@@ -23,6 +23,8 @@ public:
 
 	string get_card_id() { return _card_id; };
 	string get_debit_id() { return _debit_id; };
+	double get_limit() { return _limit; };
+	int get_debit_currency();
 
 	void rebinding_card();
 
