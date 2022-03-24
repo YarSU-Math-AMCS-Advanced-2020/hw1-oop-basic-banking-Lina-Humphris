@@ -1,6 +1,8 @@
 #pragma once
 #include "DebitAccount.h"
 #include "BankAccount.h"
+#include"PersonalBankAccount.h"
+#include "LegalEnitityBankAccount.h"
 #include "DebitCard.h"
 #include "Transaction.h"
 #include "CashTransaction.h"
@@ -19,11 +21,12 @@ private:
 	long long _max_id_account = 1; //Для аккаунта(не разделяем на персональный и не персональный)
 	long long _max_id_card = 1; //Для карты
 	long long _max_id_debit = 1; //Для дебетового счета
-	vector <BankAccount> _base_account;
-	vector <DebitAccount> _base_debit;
-	vector <DebitCard> _base_card;
-	vector <Transaction> _base_transaction;
-	vector <CashTransaction> _base_cash;
+	vector <PersonalBankAccount*> _base_personal_account;
+	vector <LegalEnitityBankAccount*> _base_legal_account;
+	vector <DebitAccount*> _base_debit;
+	vector <DebitCard*> _base_card;
+	vector <Transaction*> _base_transaction;
+	vector <CashTransaction*> _base_cash;
 
 	DataBase() {};
 	DataBase& operator=(DataBase&);
@@ -39,9 +42,10 @@ public:
 	string id_to_string(long long id);
 
 
-	void set_base_card(vector <DebitCard> base_card) { _base_card = base_card; };
-	void set_base_account(vector <BankAccount> base_account) { _base_account = base_account; };
-	void set_base_debit(vector <DebitAccount> base_debit) { _base_debit = base_debit; };
+	void set_base_card(vector <DebitCard*> base_card) { _base_card = base_card; };
+	void set_base_personal_account(vector <PersonalBankAccount*> base_account) { _base_personal_account = base_account; };
+	void set_base_legal_account(vector <LegalEnitityBankAccount*> base_account) { _base_legal_account = base_account; };
+	void set_base_debit(vector <DebitAccount*> base_debit) { _base_debit = base_debit; };
 
 
 	//будут возвращать строку длины 16, если длина числа меньше, запихиваем в начало нули
@@ -49,17 +53,19 @@ public:
 	string get_max_id_debit();
 	string get_max_id_card();
 
-	vector <BankAccount> get_base_account() { return _base_account; };
-	vector <DebitAccount> get_base_debit() { return _base_debit; };
-	vector <DebitCard> get_base_card() { return _base_card; };
-	vector <Transaction> get_base_transaction() { return _base_transaction; };
-	vector <CashTransaction> get_base_cash() { return _base_cash; };
+	vector <PersonalBankAccount*> get_base_personal_account() { return _base_personal_account; };
+	vector <LegalEnitityBankAccount*> get_base_legal_account() { return _base_legal_account; };
+	vector <DebitAccount*> get_base_debit() { return _base_debit; };
+	vector <DebitCard*> get_base_card() { return _base_card; };
+	vector <Transaction*> get_base_transaction() { return _base_transaction; };
+	vector <CashTransaction*> get_base_cash() { return _base_cash; };
 
 
 
-	void add_account(BankAccount account) { _base_account.push_back(account); };
-	void add_debit(DebitAccount debit) { _base_debit.push_back(debit); };
-	void add_card(DebitCard card) { _base_card.push_back(card); };
-	void add_transaction(Transaction transaction) { _base_transaction.push_back(transaction); };
-	void add_cash_transaction(CashTransaction cash_transaction) { _base_cash.push_back(cash_transaction); };
+	void add_personal_account(PersonalBankAccount* account) { _base_personal_account.push_back(account); };
+	void add_legal_account(LegalEnitityBankAccount* account) { _base_legal_account.push_back(account); };
+	void add_debit(DebitAccount* debit) { _base_debit.push_back(debit); };
+	void add_card(DebitCard* card) { _base_card.push_back(card); };
+	void add_transaction(Transaction* transaction) { _base_transaction.push_back(transaction); };
+	void add_cash_transaction(CashTransaction* cash_transaction) { _base_cash.push_back(cash_transaction); };
 };

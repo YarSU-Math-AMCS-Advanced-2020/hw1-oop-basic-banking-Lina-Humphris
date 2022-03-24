@@ -18,10 +18,10 @@ Transaction::Transaction(string debit_account, string transfer_account, double a
 	Date date_temp;
 	set_date(date_temp);
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitAccount> base_debit = data_base->get_base_debit();
-	vector <DebitCard> base_card = data_base->get_base_card();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
+	vector <DebitCard*> base_card = data_base->get_base_card();
 	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = base_debit[i];
+		DebitAccount curr = *base_debit[i];
 		if (curr.get_debit_id() == get_debit_account()) {
 			if (curr.get_limit() <= amount || curr.get_limit() == 0) {
 				if (curr.get_balance() >= amount) {
@@ -39,7 +39,7 @@ Transaction::Transaction(string debit_account, string transfer_account, double a
 		}
 	}
 	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = base_debit[i];
+		DebitAccount curr = *base_debit[i];
 		if (curr.get_debit_id() == get_transfer_account()) {
 			curr.set_balance(curr.get_balance() + amount);
 		}
@@ -59,15 +59,15 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	cin >> n;
 	string s;
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitAccount> base_debit = data_base->get_base_debit();
-	vector <DebitCard> base_card = data_base->get_base_card();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
+	vector <DebitCard*> base_card = data_base->get_base_card();
 	if (n == 1) {
 		cout << "Введите номер вашей карты:";
 		cin >> s;
 		string debit;
 		while (!is_accept) {
 			for (int i = 0; i < base_card.size(); i++) {
-				DebitCard curr = base_card[i];
+				DebitCard curr = *base_card[i];
 				if (curr.get_card_id() == s) {
 					is_accept = true;
 					debit = curr.get_debit_id();
@@ -85,7 +85,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 		is_accept = false;
 		while (!is_accept) {
 			for (int i = 0; i < base_card.size(); i++) {
-				DebitCard curr = base_card[i];
+				DebitCard curr = *base_card[i];
 				if (curr.get_debit_id() == s) {
 					is_accept = true;
 					debit = curr.get_debit_id();
@@ -108,7 +108,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 		cin >> s;
 		while (!is_accept) {
 			for (int i = 0; i < base_debit.size(); i++) {
-				DebitAccount curr = base_debit[i];
+				DebitAccount curr = *base_debit[i];
 				if (curr.get_debit_id() == s) {
 					is_accept = true;
 					debit_currency = curr.get_currency();
@@ -126,7 +126,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 
 		while (!is_accept) {
 			for (int i = 0; i < base_debit.size(); i++) {
-				DebitAccount curr = base_debit[i];
+				DebitAccount curr = *base_debit[i];
 				if (curr.get_debit_id() == s) {
 					is_accept = true;
 					transfer_currency = curr.get_currency();
@@ -154,9 +154,9 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	}
 	if (is_accept) {
 		for (int i = 0; i < base_debit.size(); i++) {
-			DebitAccount curr = base_debit[i];
+			DebitAccount curr = *base_debit[i];
 			if (curr.get_debit_id() == t.get_debit_account()) {
-				if (curr.get_limit() <= temp_amount || curr.get_limit() == 0) {
+				if (curr.get_limit() >= temp_amount || curr.get_limit() == 0) {
 					if (curr.get_balance() >= temp_amount) {
 						curr.set_balance(curr.get_balance() - temp_amount);
 					}
@@ -176,7 +176,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	}
 	if (is_accept) {
 		for (int i = 0; i < base_debit.size(); i++) {
-			DebitAccount curr = base_debit[i];
+			DebitAccount curr = *base_debit[i];
 			if (curr.get_debit_id() == t.get_transfer_account()) {
 				curr.set_balance(curr.get_balance() + temp_amount);
 			}
@@ -186,7 +186,25 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	t.set_amount(temp_amount);
 	t.set_currency_of_operation(debit_currency);
 	if (is_accept) t.set_status(1);
-	vector <Transaction> base_transaction = data_base->get_base_transaction();
-	data_base->add_transaction(t);
+	vector <Transaction*> base_transaction = data_base->get_base_transaction();
+	data_base->add_transaction(&t);
 	return in;
 }
+
+std::ostream& operator<<(ostream& out, Transaction& t) {
+	cout << "ID, с которого происходит перевод: " << t.get_debit_account() << endl;
+	cout << "ID, куда будет совершен перевод: " << t.get_transfer_account() << endl;
+	cout << "Сумма перевода: " << t.get_amount() << endl;
+	cout << "Валюта: ";
+	int pay = t.get_currency_of_operation();
+	if (pay == 0) cout << "рубли" << endl;
+	else if (pay == 1) cout << "доллары" << endl;
+	else cout << "евро" << endl;
+	Date temp = t.get_date();
+	cout << "Дата совершения транзакции: " << temp;
+	int res = t.get_status();
+	if (res) cout << "Транзакция прошла успещно" << endl;
+	else cout << "Транзакция отменена" << endl;
+	return out;
+}
+

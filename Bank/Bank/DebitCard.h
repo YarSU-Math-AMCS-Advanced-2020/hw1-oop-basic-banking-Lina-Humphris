@@ -23,11 +23,14 @@ public:
 
 	string get_card_id() { return _card_id; };
 	string get_debit_id() { return _debit_id; };
+	int get_pay_system() { return _pay_system; };
 	double get_limit() { return _limit; };
+	Date get_validity_period() { return _validity_period; }
 	int get_debit_currency();
 	void rebinding_card();
 	void delete_card();
 	void change_limit();
 
 	friend std::istream& operator>>(istream& in, DebitCard& t);
+	friend std::ostream& operator<<(ostream& out, DebitCard& t);
 };

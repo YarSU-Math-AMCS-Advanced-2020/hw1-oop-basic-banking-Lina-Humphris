@@ -16,18 +16,18 @@ DebitAccount::DebitAccount() {
 
 void DebitAccount::change_limit() {
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
 	double limit;
 	int n;
 	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = base_debit[i];
+		DebitAccount curr = *base_debit[i];
 		if (curr.get_debit_id() == get_debit_id()) {
 			n = i;
 		}
 	}
 	cout << "Введите лимит на снятие денег со счета или 0, если не хотите устанавливать лимит: ";
 	cin >> limit;
-	base_debit[n].set_limit(int(limit * 100) / 100);
+	base_debit[n]->set_limit(int(limit * 100) / 100);
 	data_base->set_base_debit(base_debit);
 
 }
@@ -38,11 +38,18 @@ std::istream& operator>>(istream& in, DebitAccount& t) {
 	string s;
 	cin >> s;
 	DataBase* data_base = DataBase::getInstance();
-	vector <BankAccount> base_account = data_base->get_base_account();
+	vector <PersonalBankAccount*> base_personal_account = data_base->get_base_personal_account();
+	vector <LegalEnitityBankAccount*> base_legal_account = data_base->get_base_legal_account();
 	bool is_accept = false;
 	while (!is_accept) {
-		for (int i = 0; i < base_account.size(); i++) {
-			BankAccount curr = base_account[i];
+		for (int i = 0; i < base_personal_account.size(); i++) {
+			PersonalBankAccount curr = *base_personal_account[i];
+			if (curr.get_account_id() == s) {
+				is_accept = true;
+			}
+		}
+		for (int i = 0; i < base_legal_account.size(); i++) {
+			LegalEnitityBankAccount curr = *base_legal_account[i];
 			if (curr.get_account_id() == s) {
 				is_accept = true;
 			}
@@ -65,16 +72,32 @@ std::istream& operator>>(istream& in, DebitAccount& t) {
 	string temp_id = data_base->get_max_id_debit();
 	t.set_debit_id(temp_id);
 	cout << "Регистрация прошла успешно, Вам присвоен id: " << temp_id << endl;
-	data_base->add_debit(t);
+	data_base->add_debit(&t);
 	return in;
+}
+
+std::ostream& operator<<(ostream& out, DebitAccount& t) {
+	cout << "ID счета: " << t.get_debit_id() << endl;
+	cout << "ID клиента счета: " << t.get_owner_id() << endl;
+	cout << "Баланс: " << t.get_balance() << endl;
+	cout << "Лимит: " << t.get_limit() << endl;
+	cout << "Валюта: ";
+	int cur = t.get_currency();
+	if (cur == 0) cout << "рубли" << endl;
+	else if (cur == 1) cout << "доллары" << endl;
+	else cout << "евро" << endl;
+	bool has_card = t.get_has_card();
+	if (has_card) cout << "К данному счету привязана карта" << endl;
+	else cout << "К данному счету не привязана карта" << endl;
+	return out;
 }
 
 void DebitAccount::delete_debit_account() {
 
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
 	int n;
-	cout << "Введите 0 если хотите снять деньги со счета, иначе введите 0.";
+	cout << "Введите 1 если хотите перевести деньги на другой счет, иначе введите 0, чтобы снять их.";
 	cin >> n;
 	if (n == 1) {
 		set_limit(0);
@@ -86,7 +109,7 @@ void DebitAccount::delete_debit_account() {
 		string transfer;
 		while (!is_accept) {
 			for (int i = 0; i < base_debit.size(); i++) {
-				DebitAccount curr = base_debit[i];
+				DebitAccount curr = *base_debit[i];
 				if (curr.get_debit_id() == s) {
 					is_accept = true;
 					transfer_currency = curr.get_currency();
@@ -109,11 +132,11 @@ void DebitAccount::delete_debit_account() {
 		}
 		Transaction del_acc(get_debit_id(), transfer, get_balance(), get_currency());
 	}
-	vector <DebitAccount> new_base_debit;
+	vector <DebitAccount*> new_base_debit;
 	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = base_debit[i];
+		DebitAccount curr = *base_debit[i];
 		if (curr.get_debit_id() != get_debit_id()) {
-			new_base_debit.push_back(curr);
+			new_base_debit.push_back(base_debit[i]);
 		}
 	}
 	data_base->set_base_debit(new_base_debit);

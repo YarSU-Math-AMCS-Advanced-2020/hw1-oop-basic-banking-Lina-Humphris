@@ -24,4 +24,10 @@ public:
 	void set_place(int place) { _place = place; };
 	void set_place_number(int place_number) { _place_number = place_number; };
 
+	string get_card_account() { return _card_account; };
+	double get_amount() { return _amount; };
+	Date get_date() { return _date; };
+	bool get_status() { return _status; };
+
+	friend std::ostream& operator<<(ostream& out, CashTransaction& t);
 };

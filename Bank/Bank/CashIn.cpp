@@ -14,12 +14,12 @@ std::istream& operator>>(istream& in, CashIn& t) {
 	cout << "¬ведите номер карты которую хотите пополнить: ";
 	cin >> s;
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitCard> base_card = data_base->get_base_card();
+	vector <DebitCard*> base_card = data_base->get_base_card();
 	bool is_accept = false;
 	double card_limit, debit_balance;
 	while (!is_accept) {
 		for (int i = 0; i < base_card.size(); i++) {
-			DebitCard curr = base_card[i];
+			DebitCard curr = *base_card[i];
 			if (curr.get_card_id() == s) {
 				is_accept = true;
 				account_id = curr.get_debit_id();
@@ -37,17 +37,19 @@ std::istream& operator>>(istream& in, CashIn& t) {
 	cin >> n;
 	n = int(n * 100) / 100;
 	t.set_amount(n);
-	vector <DebitAccount> base_debit = data_base->get_base_debit();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
 	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = base_debit[i];
+		DebitAccount curr = *base_debit[i];
 		if (curr.get_debit_id() == account_id) {
 			debit_balance = curr.get_balance();
-			base_debit[i].set_balance(base_debit[i].get_balance() + n);
+			base_debit[i]->set_balance(base_debit[i]->get_balance() + n);
 		}
 	}
 	data_base->set_base_debit(base_debit);
 
-	vector <CashTransaction> base_cash = data_base->get_base_cash();
-	data_base->add_cash_transaction(t);
+	vector <CashTransaction*> base_cash = data_base->get_base_cash();
+	t.set_status(true);
+	data_base->add_cash_transaction(&t);
+	
 	return in;
 }

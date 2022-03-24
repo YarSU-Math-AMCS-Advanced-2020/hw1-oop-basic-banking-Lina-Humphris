@@ -1,4 +1,6 @@
 #include "PersonalBankAccount.h"
+#include "DataBase.h"
+
 
 PersonalBankAccount::PersonalBankAccount() {
 	set_account_id("");
@@ -48,7 +50,7 @@ std::istream& operator>>(istream& in, PersonalBankAccount& t) {
 	string temp_id = data_base->get_max_id_account();
 	t.set_account_id(temp_id);
 	cout << "Регистрация прошла успешно, Вам присвоен id: " << temp_id << endl;
-	data_base->add_account(t);
+	data_base->add_personal_account(&t);
 	return in;
 }
 
@@ -61,6 +63,7 @@ std::ostream& operator<<(ostream& out, PersonalBankAccount& t) {
 	cout << "Ваш адрес: " << endl << d;
 	cout << "Ваш номер телефона: " << t.get_phone_number() << endl;
 	Date temp = t.get_birth_date();
+	cout << "Дата рождения: " << temp;
 	int sex = t.get_sex();
 	cout << "Ваш пол: ";
 	if (sex == -1) cout << "мужской" << endl;
@@ -74,40 +77,40 @@ void PersonalBankAccount::change_surname() {
 	cout << "Введите новую фамилию: ";
 	string temp;
 	cin >> temp;
-	this->set_surname(temp);
+	set_surname(temp);
 }
 
 void PersonalBankAccount::change_name() {
 	cout << "Введите новое имя: ";
 	string temp;
 	cin >> temp;
-	this->set_name(temp);
+	set_name(temp);
 }
 
 void PersonalBankAccount::change_patronymic() {
 	cout << "Введите новое отчество: ";
 	string temp;
 	cin >> temp;
-	this->set_patronymic(temp);
+	set_patronymic(temp);
 }
 
 void PersonalBankAccount::change_birth_date() {
 	cout << "Введите новую дату рождения: ";
 	Date temp;
 	cin >> temp;
-	this->set_birth_date(temp);
+	set_birth_date(temp);
 }
 
 void PersonalBankAccount::change_sex() {
 	cout << "Введите -1, если вы мужского пола; 1, если вы женского пола; иначе введите 0: ";
 	int temp;
 	cin >> temp;
-	this->set_sex(temp);
+	set_sex(temp);
 }
 
 void PersonalBankAccount::change_passport() {
 	cout << "Введите новые серию и номер паспорта в виде двенадцатизначного числа: ";
 	string temp;
 	cin >> temp;
-	this->set_passport(temp);
+	set_passport(temp);
 }

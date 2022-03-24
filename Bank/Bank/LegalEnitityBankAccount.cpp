@@ -1,4 +1,5 @@
 #include "LegalEnitityBankAccount.h"
+#include "DataBase.h"
 
 LegalEnitityBankAccount::LegalEnitityBankAccount() {
 	set_account_id("");
@@ -33,7 +34,7 @@ std::istream& operator>>(istream& in, LegalEnitityBankAccount& t) {
 	string temp_id = data_base->get_max_id_account();
 	t.set_account_id(temp_id);
 	cout << "–егистраци€ прошла успешно, ¬ам присвоен id: " << temp_id << endl;
-	data_base->add_account(t);
+	data_base->add_legal_account(&t);
 	return in;
 }
 
@@ -53,19 +54,19 @@ void LegalEnitityBankAccount::change_name() {
 	cout << "¬ведите новое название компании: ";
 	string temp;
 	cin >> temp;
-	this->set_name(temp);
+	set_name(temp);
 }
 
 void LegalEnitityBankAccount::change_establishing_date() {
 	cout << "¬ведите новую дату создани€ компании: ";
 	Date temp;
 	cin >> temp;
-	this->set_establishing_date(temp);
+	set_establishing_date(temp);
 }
 
 void LegalEnitityBankAccount::change_TIN() {
 	cout << "¬ведите новый TIN: ";
 	string temp;
 	cin >> temp;
-	this->set_TIN(temp);
+	set_TIN(temp);
 }

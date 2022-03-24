@@ -25,6 +25,11 @@ public:
 
 	string get_debit_account() { return _debit_account; };
 	string get_transfer_account() { return _transfer_account; };
+	double get_amount() { return _amount; };
+	int get_currency_of_operation() { return _currency_of_operation; };
+	Date get_date() { return _date; };
+	int get_status() { return _status; };
 
 	friend std::istream& operator>>(istream& in, Transaction& t);
+	friend std::ostream& operator<<(ostream& out,Transaction& t);
 };

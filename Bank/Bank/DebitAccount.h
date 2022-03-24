@@ -26,14 +26,16 @@ public:
 	void set_has_card(bool has_card) { _has_card = has_card; };
 
 	double get_limit() { return _limit; };
-	string get_debit_id() { return _debit_id; }
+	string get_debit_id() { return _debit_id; };
+	string get_owner_id() { return _owner_id; };
 	double get_balance() { return _balance; };
 	int get_currency() { return _currency; };
-	bool get_has_card() { return _has_card; }
+	bool get_has_card() { return _has_card; };
 
 	void delete_debit_account();
 	void change_limit();
 
 	friend std::istream& operator>>(istream& in, DebitAccount& t);
+	friend std::ostream& operator<<(ostream& out, DebitAccount& t);
 
 };
