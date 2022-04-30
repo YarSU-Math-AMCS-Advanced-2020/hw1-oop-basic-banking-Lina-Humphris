@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include "Transaction.h"
 #include <string>
 
 using namespace std;
@@ -17,7 +16,7 @@ private:
 
 public:
 	DebitAccount();
-
+	DebitAccount(string _owner_id, double _balance, double _limit, int _currency);
 	void set_debit_id(string debit_id) { _debit_id = debit_id; };
 	void set_owner_id(string owner_id) { _owner_id = owner_id; };
 	void set_balance(double balance) { _balance = balance; };

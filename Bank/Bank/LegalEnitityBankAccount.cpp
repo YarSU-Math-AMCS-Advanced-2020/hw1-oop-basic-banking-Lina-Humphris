@@ -12,6 +12,17 @@ LegalEnitityBankAccount::LegalEnitityBankAccount() {
 	set_TIN("");
 }
 
+LegalEnitityBankAccount::LegalEnitityBankAccount(string name, string TIN, Addres addres, string pnumber, Date date) {
+	set_addres(addres);
+	set_phone_number(pnumber);
+	set_name(name);
+	set_establishing_date(date);
+	set_TIN(TIN);
+	DataBase* data_base = DataBase::getInstance();
+	string temp_id = data_base->get_max_id_account();
+	set_account_id(temp_id);
+	data_base->add_legal_account(this);
+}
 std::istream& operator>>(istream& in, LegalEnitityBankAccount& t) {
 	Addres temp;
 	cin >> temp;

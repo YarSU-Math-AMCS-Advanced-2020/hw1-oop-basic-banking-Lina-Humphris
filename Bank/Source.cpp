@@ -36,7 +36,7 @@ int main() {
 	//rebinding_the_card();
 	//delete_card();
 	//change_limit_of_card();
-	//create_transaction();
+	create_transaction();
 	//create_cash_out_and_cash_in()
 }
 
@@ -187,12 +187,16 @@ void change_limit_of_card() {
 
 void create_transaction() {
 	DataBase* data_base = DataBase::getInstance();
-	PersonalBankAccount p1;
-	DebitAccount d1, d2;
-	DebitCard c1, c2;
-	cin >> p1 >> d1 >> d2 >> c1 >> c2;
-	Transaction t1, t2;
-	cin >> t1 >> t2;
+	Addres temp;
+	Date temp_date;
+	PersonalBankAccount p1("q", "w", "e", "r", temp, "t", temp_date, 0, "y");
+	DebitAccount d1("0000000000000001", 10000, 5000, 0);
+	DebitAccount d2("0000000000000001", 100000, 50000, 0);
+	DebitCard c1(&d1, 0, 1000);
+	DebitCard c2(&d2, 0, 10000);
+	Transaction t1(&c1, &d2, 1000);
+	Transaction t2(&c2, &c1, 5000);
+	Transaction t3(&d1, &d2, 10000);
 	cout << endl << "База данных транзакций: " << endl << endl;
 	vector<Transaction*> t = data_base->get_base_transaction();
 	print_vector(t);

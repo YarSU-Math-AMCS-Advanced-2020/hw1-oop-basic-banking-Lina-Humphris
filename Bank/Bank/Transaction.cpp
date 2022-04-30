@@ -1,6 +1,7 @@
 #include "Transaction.h"
 #include "DataBase.h"
 
+
 Transaction::Transaction() {
 	set_debit_account("");
 	set_transfer_account("");
@@ -10,6 +11,87 @@ Transaction::Transaction() {
 	set_date(date_temp);
 	set_status(0);
 }
+
+Transaction Transaction::operator=(Transaction t) {
+	set_debit_account(t.get_debit_account());
+	set_transfer_account(t.get_transfer_account());
+	set_amount(t.get_amount());
+	set_currency_of_operation(t.get_currency_of_operation());
+	set_date(t.get_date());
+	set_status(t.get_status());
+	return *this;
+}
+
+Transaction Transaction::do_transaction(DebitAccount* from, DebitAccount* in, int amount) {
+	set_debit_account(from->get_debit_id());
+	set_transfer_account(in->get_debit_id());
+	set_amount(amount);
+	set_currency_of_operation(from->get_currency());
+	Date date_temp;
+	set_date(date_temp);
+	DataBase* data_base = DataBase::getInstance();
+	vector <DebitAccount*> base_debit = data_base->get_base_debit();
+	vector <DebitCard*> base_card = data_base->get_base_card();
+	if (from->get_balance() >= amount && (from->get_limit() >= amount || from->get_limit() == 0)) from->set_balance(from->get_balance() - amount);
+	else {
+		set_status(0);
+		return *this;
+	}
+	in->set_balance(in->get_balance() + amount);
+	set_status(1);
+	return *this;
+
+}
+
+Transaction::Transaction(DebitAccount* from, DebitAccount* in, int amount) {
+	Transaction t = do_transaction(from, in, amount);
+	DataBase* data_base = DataBase::getInstance();
+	set_debit_account(t.get_debit_account());
+	set_transfer_account(t.get_transfer_account());
+	set_amount(t.get_amount());
+	set_currency_of_operation(t.get_currency_of_operation());
+	set_date(t.get_date());
+	set_status(t.get_status());
+	data_base->add_transaction(this);
+}
+Transaction::Transaction(DebitCard* from, DebitAccount* in, int amount) {
+	Transaction t = do_transaction(from->get_debit_id(), in, amount);
+	DataBase* data_base = DataBase::getInstance();
+	set_debit_account(t.get_debit_account());
+	set_transfer_account(t.get_transfer_account());
+	set_amount(t.get_amount());
+	set_currency_of_operation(t.get_currency_of_operation());
+	set_date(t.get_date());
+	set_status(t.get_status());
+
+	data_base->add_transaction(this);
+
+}
+Transaction::Transaction(DebitAccount* from, DebitCard* in, int amount) {
+	Transaction t = do_transaction(from, in->get_debit_id(), amount);
+	DataBase* data_base = DataBase::getInstance();
+	set_debit_account(t.get_debit_account());
+	set_transfer_account(t.get_transfer_account());
+	set_amount(t.get_amount());
+	set_currency_of_operation(t.get_currency_of_operation());
+	set_date(t.get_date());
+	set_status(t.get_status());
+
+	data_base->add_transaction(this);
+}
+Transaction::Transaction(DebitCard* from, DebitCard* in, int amount){
+	Transaction t = do_transaction(from->get_debit_id(), in->get_debit_id(), amount);
+	DataBase* data_base = DataBase::getInstance();
+	set_debit_account(t.get_debit_account());
+	set_transfer_account(t.get_transfer_account());
+	set_amount(t.get_amount());
+	set_currency_of_operation(t.get_currency_of_operation());
+	set_date(t.get_date());
+	set_status(t.get_status());
+
+	data_base->add_transaction(this);
+}
+
 Transaction::Transaction(string debit_account, string transfer_account, double amount, int currency_of_operation) {
 	set_debit_account(debit_account);
 	set_transfer_account(transfer_account);
@@ -29,11 +111,15 @@ Transaction::Transaction(string debit_account, string transfer_account, double a
 				}
 				else {
 					set_status(0);//возможно добавление выброса исключения с последующим отловом
+					data_base->add_transaction(this);
+
 					return;
 				}
 			}
 			else {
 				set_status(0);
+				data_base->add_transaction(this);
+
 				return;
 			}
 		}
@@ -46,6 +132,7 @@ Transaction::Transaction(string debit_account, string transfer_account, double a
 	}
 	data_base->set_base_debit(base_debit);
 	set_status(1);
+	data_base->add_transaction(this);
 }
 
 std::istream& operator>>(istream& in, Transaction& t) {
@@ -64,7 +151,7 @@ std::istream& operator>>(istream& in, Transaction& t) {
 	if (n == 1) {
 		cout << "Введите номер вашей карты:";
 		cin >> s;
-		string debit;
+		DebitAccount* debit = NULL;
 		while (!is_accept) {
 			for (int i = 0; i < base_card.size(); i++) {
 				DebitCard curr = *base_card[i];
@@ -79,14 +166,14 @@ std::istream& operator>>(istream& in, Transaction& t) {
 			}
 			if (!is_accept) cin >> s;
 		}
-		t.set_debit_account(debit);
+		t.set_debit_account(debit->get_debit_id());
 		cout << "Введите номер карты, на который будет совершен перевод: ";
 		cin >> s;
 		is_accept = false;
 		while (!is_accept) {
 			for (int i = 0; i < base_card.size(); i++) {
 				DebitCard curr = *base_card[i];
-				if (curr.get_debit_id() == s) {
+				if (curr.get_debit_id()->get_debit_id() == s) {
 					is_accept = true;
 					debit = curr.get_debit_id();
 					transfer_currency = curr.get_debit_currency();
@@ -95,13 +182,13 @@ std::istream& operator>>(istream& in, Transaction& t) {
 			if (!is_accept) {
 				cout << "Карты с таким номером не существует, попробуйте еще раз: ";
 			}
-			if (debit == t.get_debit_account()) {
+			if (debit->get_debit_id() == t.get_debit_account()) {
 				cout << "Номер введенной карты совпадает с номером карты с которой будет производиться перевод, попробуйте еще раз: ";
 				is_accept = false;
 			}
 			if (!is_accept) cin >> s;
 		}
-		t.set_transfer_account(debit);
+		t.set_transfer_account(debit->get_debit_id());
 	}
 	else {
 		cout << "Введите номер вашего счета: ";

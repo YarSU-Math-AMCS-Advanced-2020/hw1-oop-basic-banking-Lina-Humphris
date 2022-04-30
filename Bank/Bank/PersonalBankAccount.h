@@ -17,7 +17,7 @@ private:
     string _passport;
 public:
     PersonalBankAccount();
-
+    PersonalBankAccount(string name, string surname, string patronymic, string TIN, Addres addres, string pnumber, Date birth_date, int sex, string passport);
     void set_surname(string surname) { _surname = surname; };
     void set_name(string name) { _name = name; };
     void set_patronymic(string patronymic) { _patronymic = patronymic; };

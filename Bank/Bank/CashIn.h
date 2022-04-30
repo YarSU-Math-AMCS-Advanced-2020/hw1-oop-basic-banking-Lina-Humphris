@@ -10,6 +10,7 @@ class CashIn :
 {
 public:
     CashIn();
+    CashIn(string card_account, double amount, bool status, int place, int place_number);
     friend std::istream& operator>>(istream& in, CashIn& t);
 
 };

@@ -8,6 +8,18 @@ CashOut::CashOut() {
 
 }
 
+CashOut::CashOut(string card_account, double amount, bool status, int place, int place_number) {
+	set_card_account(card_account);
+	set_amount(amount);
+	set_date();
+	set_status(status);
+	set_place(place);
+	set_place_number(place_number);
+
+	DataBase* data_base = DataBase::getInstance();
+	data_base->add_cash_transaction(this);
+}
+
 std::istream& operator>>(istream& in, CashOut& t) {
 	string s;
 	string account_id;
@@ -22,7 +34,7 @@ std::istream& operator>>(istream& in, CashOut& t) {
 			DebitCard curr = *base_card[i];
 			if (curr.get_card_id() == s) {
 				is_accept = true;
-				account_id = curr.get_debit_id();
+				account_id = curr.get_debit_id()->get_debit_id();
 				card_limit = curr.get_limit();
 			}
 		}

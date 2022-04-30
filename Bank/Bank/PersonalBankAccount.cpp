@@ -16,6 +16,20 @@ PersonalBankAccount::PersonalBankAccount() {
 	set_passport("");
 
 }
+PersonalBankAccount::PersonalBankAccount(string name, string surname, string patronymic, string TIN, Addres addres, string pnumber, Date birth_date, int sex, string passport) {
+	set_addres(addres);
+	set_phone_number(pnumber);
+	set_surname(surname);
+	set_name(name);
+	set_patronymic(patronymic);
+	set_birth_date(birth_date);
+	set_sex(sex);
+	set_passport(passport);
+	DataBase* data_base = DataBase::getInstance();
+	string temp_id = data_base->get_max_id_account();
+	set_account_id(temp_id);
+	data_base->add_personal_account(this);
+}
 
 std::istream& operator>>(istream& in, PersonalBankAccount& t) {
 	Addres temp;

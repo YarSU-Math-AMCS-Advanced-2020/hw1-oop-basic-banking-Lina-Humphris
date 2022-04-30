@@ -14,6 +14,18 @@ DebitAccount::DebitAccount() {
 	set_has_card(false);
 }
 
+DebitAccount::DebitAccount(string _owner_id, double _balance, double _limit, int _currency) {
+	DataBase* data_base = DataBase::getInstance();
+	string temp_id = data_base->get_max_id_debit();
+	set_debit_id(temp_id);
+	set_owner_id(_owner_id);
+	set_balance(_balance);
+	set_limit(_limit);
+	set_currency(_currency);
+	set_has_card(false);
+	data_base->add_debit(this);
+}
+
 void DebitAccount::change_limit() {
 	DataBase* data_base = DataBase::getInstance();
 	vector <DebitAccount*> base_debit = data_base->get_base_debit();

@@ -15,7 +15,7 @@ private:
     string _TIN;
 public:
     LegalEnitityBankAccount();
-
+    LegalEnitityBankAccount(string name, string TIN, Addres addres, string pnumber, Date date);
     void set_name(string name) { _name = name; };
     void set_establishing_date(Date establishing_date) { _establishing_date = establishing_date; };
     void set_TIN(string TIN) { _TIN = TIN; };

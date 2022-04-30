@@ -4,23 +4,34 @@
 
 DebitCard::DebitCard() {
 	set_card_id("");
-	set_debit_id("");
 	set_pay_system(0);
 	set_limit(0);
 	Date temp_date;
 	set_validity_period(temp_date);
 }
 
-int DebitCard::get_debit_currency() {
+DebitCard::DebitCard(DebitAccount* _debit_id, int _pay_system, double _limit) {
+	_debit_id->set_has_card(true);
 	DataBase* data_base = DataBase::getInstance();
-	vector <DebitAccount*> base_debit = data_base->get_base_debit();
-	for (int i = 0; i < base_debit.size(); i++) {
-		DebitAccount curr = *base_debit[i];
-		if (curr.get_debit_id() == get_debit_id()) {
-			return curr.get_currency();
-		}
-	}
+	set_debit_id(_debit_id);
+	set_pay_system(_pay_system);
+	set_limit(_limit);
+	Date temp;
+	temp.set_year(temp.get_year() + 4);
+	set_validity_period(temp);
+	string temp_id = data_base->get_max_id_card();
+	set_card_id(temp_id);
+	data_base->add_card(this);
 }
+
+int DebitCard::get_debit_currency() {
+	return get_debit_id()->get_currency();
+}
+
+void DebitCard::change_limit(int new_limit) {
+	set_limit(new_limit);
+}
+
 
 void DebitCard::change_limit() {
 	DataBase* data_base = DataBase::getInstance();
@@ -32,22 +43,8 @@ void DebitCard::change_limit() {
 		"если хотите установить лимит такой же,как на счете, иначе введите лимит: ";
 	cin >> limit;
 	limit = int(limit * 100) / 100;
-	for (int i = 0; i < base_card.size(); i++) {
-		DebitCard curr = *base_card[i];
-		if (curr.get_card_id() == get_card_id()) {
-			n = i;
-		}
-	}
-	if (limit == -1) {
-		for (int i = 0; i < base_debit.size(); i++) {
-			DebitAccount curr = *base_debit[i];
-			if (curr.get_debit_id() == get_debit_id()) {
-				base_card[n]->set_limit(curr.get_limit());
-			}
-		}
-	}
-	else base_card[n]->set_limit(limit);
-	data_base->set_base_card(base_card);
+	if (limit == -1) change_limit(get_debit_id()->get_limit());
+	else change_limit(limit);
 }
 
 
@@ -58,7 +55,7 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 	DataBase* data_base = DataBase::getInstance();
 	vector <DebitAccount*> base_debit = data_base->get_base_debit();
 	bool is_accept = false;
-
+	DebitAccount* temp_debit = NULL;
 	while (!is_accept) {
 		bool has_card;
 		for (int i = 0; i < base_debit.size(); i++) {
@@ -67,6 +64,7 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 				is_accept = true;
 				has_card = curr.get_has_card();
 				base_debit[i]->set_has_card(true);
+				temp_debit = &curr;
 			}
 		}
 		if (!is_accept) {
@@ -79,7 +77,7 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 		if (!is_accept) cin >> s;
 
 	}
-	t.set_debit_id(s);
+	t.set_debit_id(temp_debit);
 	cout << "Выберите платежную систему. \nВведите 0, если хотите выбрать Lisa, 1 - MasterBart, 2 - HoMiR: ";
 	int n;
 	cin >> n;
@@ -89,14 +87,7 @@ std::istream& operator>>(istream& in, DebitCard& t) {
 	double limit;
 	cin >> limit;
 	limit = int(limit * 100) / 100;
-	if (limit == -1) {
-		for (int i = 0; i < base_debit.size(); i++) {
-			DebitAccount curr = *base_debit[i];
-			if (curr.get_debit_id() == s) {
-				t.set_limit(curr.get_limit());
-			}
-		}
-	}
+	if (limit == -1) t.set_limit(t.get_debit_id()->get_limit());
 	else t.set_limit(limit);
 	Date temp;
 	temp.set_year(temp.get_year() + 4);
@@ -147,12 +138,14 @@ void DebitCard::rebinding_card() {
 	cout << "Введите номер счета, к которому хотите перепривязать карту: ";
 	cin >> account;
 	is_accept = false;
+	DebitAccount* temp_debit = NULL;
 	while (!is_accept) {
 		for (int i = 0; i < base_account.size(); i++) {
 			DebitAccount curr = *base_account[i];
 			if (curr.get_debit_id() == account) {
 				is_accept = true;
 				num_of_debit_account = i;
+				temp_debit = &curr;
 			}
 		}
 		if (!is_accept) {
@@ -166,7 +159,7 @@ void DebitCard::rebinding_card() {
 		}
 		if (!is_accept) cin >> card;
 	}
-	base_card[num_of_debit_card]->set_debit_id(account);
+	base_card[num_of_debit_card]->set_debit_id(temp_debit);
 	data_base->set_base_card(base_card);
 }
 
@@ -181,11 +174,6 @@ void DebitCard::delete_card() {
 			new_base_card.push_back(base_card[i]);
 		}
 	}
-	for (int i = 0; i < base_account.size(); i++) {
-		DebitAccount curr = *base_account[i];
-		if (curr.get_debit_id() == get_debit_id()) {
-			base_account[i]->set_has_card(false);
-		}
-	}
+	get_debit_id()->set_has_card(false);
 	data_base->set_base_card(new_base_card);
 }
